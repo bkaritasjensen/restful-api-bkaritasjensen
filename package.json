@@ -20,6 +20,7 @@
   "dependencies": {
     "admin": "^1.4.1",
     "express": "^4.17.1",
+    "express-formidable": "^1.2.0",
     "express-winston": "^4.0.1",
     "firebase": "^7.3.0",
     "winston": "^3.2.1"
