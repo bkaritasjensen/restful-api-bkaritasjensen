@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/rts-cmk/cheese-api#readme",
   "dependencies": {
+    "admin": "^1.4.1",
     "express": "^4.17.1",
     "express-winston": "^4.0.1",
     "firebase": "^7.3.0",
