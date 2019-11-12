@@ -73,11 +73,17 @@ exports.updateProduct = async function (req, res){
 		if (req.fields.weight){
 			req.fields.weight = parseFloat(req.fields.weight)
 		}
-		const docs = await productRef
-		.where("sku", "==", req.params.sku)
-		.limit(1)
-		.get()
-		docs.forEach(doc => res.json(doc.data()));
+		const docs = await productRef.where("sku", "==", req.params.sku).limit(1).get();
+		docs.forEach(async doc => {
+			try{
+				doc.ref.update({ ...req.fields });
+				const result = await doc.ref.get();
+				res.json(result.data());
+			}catch (error){
+				res.status(500).end();
+				log.error(error.stack);
+			}
+		})
 	}catch (error){
 		res.status(500).end();
 		log.error(error.stack);
