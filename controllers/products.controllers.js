@@ -1,5 +1,4 @@
 const productRef = require("../models/product.model");
-
 const { log } = require("../middleware/logger");
 
 
@@ -66,8 +65,25 @@ exports.getAllProducts = async function (req, res){
 	});
 }; */
 
- 
-exports.updateProduct = function (req, res){
+exports.updateProduct = async function (req, res){
+	try {
+		if (req.fields.price){
+			req.fields.price = parseFloat(req.fields.price)
+		}
+		if (req.fields.weight){
+			req.fields.weight = parseFloat(req.fields.weight)
+		}
+		const docs = await productRef
+		.where("sku", "==", req.params.sku)
+		.limit(1)
+		.get()
+		docs.forEach(doc => res.json(doc.data()));
+	}catch (error){
+		res.status(500).end();
+		log.error(error.stack);
+	}
+};
+/* exports.updateProduct = function (req, res){
 	if (req.fields.price){
 		req.fields.price = parseFloat(req.fields.price)
 	}
@@ -82,7 +98,7 @@ exports.updateProduct = function (req, res){
 			);
 		})
 };
-
+ */
 exports.deleteProduct = async function (req, res){
 	try{
 		const docs = await productRef.where("sku", "==", req.params.sku).get()
