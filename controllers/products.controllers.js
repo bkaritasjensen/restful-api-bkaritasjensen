@@ -1,5 +1,24 @@
 const productRef = require("../models/product.model");
 
+const { log } = require("./middleware/logger");
+
+function getSingleProduct(docs) {
+	return docs[0];
+};
+
+exports.getSingleProduct = async function (req, res){
+	try {
+		const docs = await productRef
+		.where("sku", "=", req.params.sku)
+		.limit(1)
+		.get()
+	docs.forEach(doc => res.json(doc.data()));
+	} catch (error) {
+		log.error(error.stack);
+		res.status(500).end();
+	}
+};
+
 exports.createProduct = function (req, res){//Hardcoder databasen. Henter createProduct fra home.rute.js filen.
 	//Opret data.
 	req.fields.price = parseFloat(req.fields.price);//Skrives kun ved price og weight fordi de er numbers og ikke strings.
