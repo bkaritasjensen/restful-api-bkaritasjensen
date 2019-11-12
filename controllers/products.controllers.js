@@ -1,12 +1,15 @@
 const productRef = require("../models/product.model");
 
-exports.createProduct = function (req, res){//Hardcoder databasen.
+exports.createProduct = function (req, res){//Hardcoder databasen. Henter createProduct fra home.rute.js filen.
 	//Opret data.
 	req.fields.price = parseFloat(req.fields.price);//Skrives kun ved price og weight fordi de er numbers og ikke strings.
 	req.fields.weight = parseFloat(req.fields.weight);
-	productRef.add({...req.fields})//det samme som man skriver obejkter med værdier. altså .... name: "Bjarne", price: 100 osv....
-		.then(ref =>{//Udskriver json - data'en.
-			ref.get().then(doc => res.status(201).json(doc.data())) 
+	productRef.add({ ...req.fields })//det samme som man skriver obejkter med værdier. altså .... name: "Bjarne", price: 100 osv....
+		.then(ref => {//Udskriver json - data'en.
+			console.log("hej")
+			ref.get()
+				.then(doc => res.status(201).json(doc.data()))
+				.catch(err => console.log(err))
 		})
 		.catch(error => res.json(error));//Hvis der sker en fejl skriver den fejlen ud stedenfor json - data'en.
 };
@@ -14,7 +17,7 @@ exports.createProduct = function (req, res){//Hardcoder databasen.
 exports.getAllProducts = function(req, res){
 	productRef.get().then(docs => {
 		const result = []; //Laver et tomt array til at putte documenterne i.
-		docs.forEach(docs => result.push(doc.data()))
+		docs.forEach(doc => result.push(doc.data()))
 		res.json(result);
 	});
 };
