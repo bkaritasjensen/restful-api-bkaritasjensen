@@ -2,7 +2,7 @@ const productRef = require("../models/product.model");
 const { log } = require("../middleware/logger");
 
 
-exports.getSingleProduct = async function (req, res){
+exports.getSingleProduct = async function (req, res){ //response indeholder altid en header og body, selvom der ikke er nogen i HTML-filen. Requiest henter http-adrressen.
 	try {
 		const docs = await productRef
 		.where("sku", "==", req.params.sku)
@@ -85,7 +85,7 @@ exports.updateProduct = async function (req, res){
 			}
 		})
 	}catch (error){
-		res.status(500).end();
+		res.status(500).end();//status er det som indeholder koderne, for fejl-nummere.
 		log.error(error.stack);
 	}
 };
